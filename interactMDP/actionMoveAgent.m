@@ -1,4 +1,4 @@
-function [ agentRewardSignal, currentAgentLocation, nextTimeStep, ...
+function [ agentRewardSignal, nextAgentLocation, nextTimeStep, ...
     agentMovementHistory ] = ...
     actionMoveAgent( agentCommand, currentAgentLocation, GridMap, ...
     currentTimeStep, agentMovementHistory, ...
@@ -11,7 +11,15 @@ function [ agentRewardSignal, currentAgentLocation, nextTimeStep, ...
 %
 % Optional input arguments do bookeeping for the $currentTimeStep$ and
 % $moveHistory$.
-           
+       
+    transformOutputToStateNumber = 0;
+    if length(currentAgentLocation) == 1
+        currentAgentLocation = ...
+            GridMap.getCoordinatesFromStateNumber(currentAgentLocation);
+        transformOutputToStateNumber = 1;
+    end % if the state was given by its number rather than its
+    % coordinates
+
     if randomWeightedSelect( ...
             [ 1 - probabilityOfUniformlyRandomDirectionTaken, ...
             probabilityOfUniformlyRandomDirectionTaken ] ) - 1 %#ok<BDLOG>
@@ -20,22 +28,36 @@ function [ agentRewardSignal, currentAgentLocation, nextTimeStep, ...
         
     end
     
-    currentAgentLocation = ...
+    nextAgentLocation = ...
         move( agentCommand, currentAgentLocation, GridMap.Grid ) ;
     
-    agentRewardSignal = GridMap.RewardFunction( ...
-        currentAgentLocation(1), currentAgentLocation(2) ) ;
+    agentRewardSignal = GridMap.getReward( ...
+        currentAgentLocation, nextAgentLocation, agentCommand ) ;
     
     if nargin > 3
         
         nextTimeStep = currentTimeStep + 1;
         
         if nargin > 4
-            agentMovementHistory(nextTimeStep + 1, :) = ...
-                currentAgentLocation ;
+            
+            if length( agentMovementHistory(nextTimeStep + 1, :) ) == 2
+                agentMovementHistory(nextTimeStep + 1, :) = ...
+                    nextAgentLocation ;
+            else
+                agentMovementHistory(nextTimeStep + 1, :) = ...
+                    obj.getStateNumberFromCoordinates(...
+                    nextAgentLocation);
+            end % format data to be saved in $agentMovementHistory$
+                
         end % if we were given the complete history of moves.
         
     end % if we were given the current time step.
+            
+    if transformOutputToStateNumber == 1
+         nextAgentLocation = obj.getStateNumberFromCoordinates(...
+             nextAgentLocation);
+    end % if we were given state input in the form of a state number, then 
+    % the output should be given as a state number too.
     
 end % function actionMoveAgent
     
