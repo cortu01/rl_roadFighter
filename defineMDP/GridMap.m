@@ -79,7 +79,7 @@ classdef GridMap
                 nextStates(1,:) = [ state(1)-1, state(2)  ]; % UP
                 nextStates(2,:) = [ state(1)-1, state(2)+1]; % UP_RIGHT
                 if action == 1 % UP_LEFT
-                    probabilities(1) = 1 - p + p/3;
+                    probabilities(1) = 1 - p + 2*p/3;
                     probabilities(2) = p/3;
                 elseif action == 2 % UP
                     probabilities(1) = 1 - p + 2*p/3;
