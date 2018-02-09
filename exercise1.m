@@ -89,6 +89,7 @@ pi_test1(:, 1) = UP_RIGHT; % When on the leftmost column, go up right.
 pi_test1(:, 5) = UP_LEFT ; % When on the rightmost column, go up left.
 pi_test1(:, 3) = UP_LEFT ; % When on the center column, go up left.
 
+pi_test1_stateNumbers(:) = pi_test1';
 
 %%
 currentTimeStep = 0 ;
