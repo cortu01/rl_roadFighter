@@ -62,7 +62,7 @@ classdef GridMap
             
             transformOutputToStateNumber = 0;
             if length(state) == 1
-                state = obj.getCoordinatesFromStateNumber(state);
+                state = obj.getCoordinatesFromStateNumber(state)
                 transformOutputToStateNumber = 1;
             end % if the state was given by its number rather than its 
             % coordinates            
@@ -215,6 +215,31 @@ classdef GridMap
             
         end % getStateNumberFromCoordinates
             
+        function [ stateFeatures ] = ...
+                getStateFeatures( obj, state )
+            % There is a real problem with our definition of features.
+            % Can you figure it out and maybe use it for the last bonus?
+            
+            if length(state) == 1
+                state = obj.getCoordinatesFromStateNumber(state);
+            end % if the state was given by its number rather than its 
+            % coordinates 
+            
+            minRow = state(1) - 4;
+            maxRow = state(1) - 1;
+            if maxRow < 1
+                stateFeatures = zeros(4, 5);
+            elseif minRow < 1
+                tempMatrix = zeros(4, 5);
+                tempMatrix(4-maxRow + 1:4, :) = ...
+                    obj.RewardFunction(1:maxRow, :);
+                stateFeatures = tempMatrix;
+            else      
+                stateFeatures = obj.RewardFunction(minRow:maxRow, :);
+            end % if  
+            
+        end % getStateFeatures
+        
     end % methods
     
 end % classdef

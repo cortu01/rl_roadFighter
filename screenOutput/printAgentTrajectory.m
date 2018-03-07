@@ -22,7 +22,7 @@ if currentTimeStep > 1
     % Print agent trajectory so far:
     
     printAgentLocation( currentMap, 1, ...
-        agentMovementHistory(1:currentTimeStep-1, :), ...
+        agentMovementHistory(1:currentTimeStep, :), ...-1
         currentMap.MarkerRescaleFactor, 'o' )
     
 end % if currentTimeStep > 1
