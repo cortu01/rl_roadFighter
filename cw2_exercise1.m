@@ -58,7 +58,8 @@ stateFeatures = ones( 4, 5 );
 action_values = zeros(1, 3);
 
 Q_test1 = ones(4, 5, 3);
-Q_test1(:,:,2) = 100; % obviously this is not a correctly computed Q-function; it does imply a policy however: Always go Up!
+Q_test1(:,:,1) = 100;
+Q_test1(:,:,3) = 100;% obviously this is not a correctly computed Q-function; it does imply a policy however: Always go Up! (though on a clear road it will default to the first indexed action: go left)
 
 
 %% TEST ACTION TAKING, MOVING WINDOW AND TRAJECTORY PRINTING:
@@ -68,7 +69,7 @@ Q_test1(:,:,2) = 100; % obviously this is not a correctly computed Q-function; i
 % Commented lines also have examples of use for $GridMap$'s $getReward$ and
 % $getTransitions$ functions, which act as our reward and transition
 % functions respectively.
-for episode = 1:3
+for episode = 1:1
     
     
     %%
@@ -95,9 +96,9 @@ for episode = 1:3
         
         for action = 1:3
             action_values(action) = ...
-                sum ( sum( Q_test1(:,:,1) .* stateFeatures ) );
+                sum ( sum( Q_test1(:,:,action) .* stateFeatures ) );
         end % for each possible action
-        [~, actionTaken] = max(action_values);
+        [~, actionTaken] = max(action_values)
                
         % The $GridMap$ functions $getTransitions$ and $getReward$ act as the
         % problems transition and reward function respectively.
