@@ -97,7 +97,7 @@ for episode = 1:3
             action_values(action) = ...
                 sum ( sum( Q_test1(:,:,1) .* stateFeatures ) );
         end % for each possible action
-        actionTaken = argmax( action_values );
+        [~, actionTaken] = max(action_values);
                
         % The $GridMap$ functions $getTransitions$ and $getReward$ act as the
         % problems transition and reward function respectively.
